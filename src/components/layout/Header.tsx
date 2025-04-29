@@ -73,7 +73,7 @@ export function Header() {
           </Sheet>
 
           {/* Brand Logo/Name */}
-          <Link href="/" className="flex items-center gap-2" aria-label="SimpliShop Home">
+          <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="SimpliShop Home">
             <Store className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold tracking-tight">SimpliShop</span>
           </Link>
