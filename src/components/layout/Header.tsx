@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart, Store, User, LogOut, LogIn, Menu } from "lucide-react"; // Import Menu icon
+import { ShoppingCart, Store, User, LogOut, LogIn, Menu, Tag, PackageX, Truck, Home, Contact, Package } from "lucide-react"; // Import new icons
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet"; // Import SheetClose
 import { Badge } from "@/components/ui/badge";
@@ -32,55 +32,80 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4"> {/* Reduced gap for smaller screens */}
           {/* Hamburger Menu Sheet */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Toggle Menu"> {/* Hide on medium screens and up */}
-                <Menu className="h-6 w-6" />
+              {/* Removed md:hidden to always show the hamburger, adjust trigger if needed */}
+              <Button variant="ghost" size="icon" aria-label="Toggle Menu" className="transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs p-4"> {/* Adjust width as needed */}
-              <SheetHeader className="mb-4">
+              <SheetHeader className="mb-4 pb-2 border-b">
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
-               <Separator />
-               <nav className="flex flex-col space-y-3 mt-4">
+
+               <nav className="flex flex-col space-y-2 mt-4 text-base">
                  <SheetClose asChild>
-                   <Link href="/" className="text-lg hover:text-primary transition-colors">Home</Link>
+                   <Link href="/" className="flex items-center gap-3 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                     <Home className="h-5 w-5" /> Home
+                    </Link>
                  </SheetClose>
                  <SheetClose asChild>
-                  <Link href="/products" className="text-lg hover:text-primary transition-colors">Products</Link>
+                  <Link href="/products" className="flex items-center gap-3 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                    <Package className="h-5 w-5" /> All Products
+                  </Link>
                  </SheetClose>
                  <SheetClose asChild>
-                  <Link href="/contact" className="text-lg hover:text-primary transition-colors">Contact</Link>
+                  <Link href="/contact" className="flex items-center gap-3 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                    <Contact className="h-5 w-5" /> Contact
+                    </Link>
                  </SheetClose>
-                 {/* Add more future links here */}
-                 <Separator />
+
+                 <Separator className="my-3" />
+
+                 {/* Special Product Categories */}
+                 <h4 className="text-sm font-semibold text-muted-foreground px-2 mb-1">Categories</h4>
+                 <SheetClose asChild>
+                  <Link href="/products?filter=discounted" className="flex items-center gap-3 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                    <Tag className="h-5 w-5 text-primary" /> Discounted
+                  </Link>
+                 </SheetClose>
+                  <SheetClose asChild>
+                  <Link href="/products?filter=out-of-stock" className="flex items-center gap-3 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                    <PackageX className="h-5 w-5 text-destructive" /> Out of Stock
+                  </Link>
+                 </SheetClose>
+                 <SheetClose asChild>
+                  <Link href="/products?filter=upcoming" className="flex items-center gap-3 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                    <Truck className="h-5 w-5 text-blue-500" /> Upcoming
+                  </Link>
+                 </SheetClose>
+
+                 <Separator className="my-3" />
+
                   {!isAuthenticated && (
                      <SheetClose asChild>
-                       <Link href="/login" className="text-lg hover:text-primary transition-colors flex items-center">
-                         <LogIn className="mr-2 h-5 w-5" /> Login
+                       <Link href="/login" className="flex items-center gap-3 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                         <LogIn className="h-5 w-5" /> Login
                        </Link>
                      </SheetClose>
                   )}
                </nav>
-                {/* Placeholder for future menu items */}
-               {/* <div className="mt-auto pt-4">
-                <p className="text-center text-muted-foreground text-sm">More options coming soon!</p>
-               </div> */}
             </SheetContent>
           </Sheet>
 
           {/* Brand Logo/Name */}
-          <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="SimpliShop Home">
-            <Store className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold tracking-tight">SimpliShop</span>
-          </Link>
+          {/* Wrapped Store icon in a button for Sheet trigger */}
+           <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80" aria-label="SimpliShop Home">
+              <Store className="h-6 w-6 text-primary transition-transform hover:rotate-[-5deg]" />
+              <span className="text-xl font-bold tracking-tight hidden sm:inline">SimpliShop</span> {/* Hide text on extra small screens */}
+           </Link>
         </div>
 
         {/* Right Side Navigation (Auth & Cart) */}
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-2 md:gap-4"> {/* Reduced gap */}
 
           {/* Auth Section */}
           {isAuthenticated && user ? (
@@ -103,16 +128,16 @@ export function Header() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout}>
+                <DropdownMenuItem onClick={logout} className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-             <Link href="/login" passHref className="hidden md:inline-flex"> {/* Hide login button on small screens where hamburger is shown */}
+             <Link href="/login" passHref className="hidden md:inline-flex"> {/* Keep hidden on small screens */}
               <Button variant="ghost" size="sm" aria-label="Login">
-                 <LogIn className="mr-2 h-4 w-4" /> Login
+                 <LogIn className="mr-1 h-4 w-4" /> Login
               </Button>
             </Link>
           )}
