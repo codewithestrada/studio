@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -72,11 +73,17 @@ export default {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+        'cart-icon-shake': { // Add cart icon keyframes
+          '0%, 100%': { transform: 'translateX(0) rotate(0deg)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-3px) rotate(-5deg)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(3px) rotate(5deg)' },
+        },
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+        'cart-icon': 'cart-icon-shake 0.5s ease-in-out', // Add cart icon animation utility
   		}
   	}
   },

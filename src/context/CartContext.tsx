@@ -1,8 +1,9 @@
+
 "use client";
 
 import type { Product, CartItem } from "@/types/product";
 import type { ReactNode } from "react";
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 interface CartContextType {
@@ -13,13 +14,21 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  isAnimatingCart: boolean; // State for cart icon animation
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isAnimatingCart, setIsAnimatingCart] = useState(false); // Animation state
   const { toast } = useToast();
+
+  const triggerCartAnimation = useCallback(() => {
+    setIsAnimatingCart(true);
+    setTimeout(() => setIsAnimatingCart(false), 500); // Animation duration
+  }, []);
+
 
   const addToCart = (product: Product) => {
     setCartItems((prevItems) => {
@@ -36,6 +45,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
+    triggerCartAnimation(); // Trigger animation
     toast({
       title: "Added to Cart",
       description: `${product.name} has been added to your cart.`,
@@ -62,6 +72,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           item.id === productId ? { ...item, quantity } : item
         )
       );
+       // Optionally trigger animation on quantity update too
+       // triggerCartAnimation();
     }
   };
 
@@ -93,6 +105,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         clearCart,
         totalItems,
         totalPrice,
+        isAnimatingCart, // Expose animation state
       }}
     >
       {children}
@@ -107,3 +120,4 @@ export const useCart = (): CartContextType => {
   }
   return context;
 };
+

@@ -19,9 +19,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"; // Import Separator
+import { cn } from "@/lib/utils"; // Import cn for conditional classes
 
 export function Header() {
-  const { totalItems } = useCart();
+  const { totalItems, isAnimatingCart } = useCart(); // Get isAnimatingCart state
   const { isAuthenticated, user, logout } = useAuth(); // Get auth state and functions
 
   const getInitials = (name?: string) => {
@@ -146,7 +147,12 @@ export function Header() {
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="relative" aria-label={`View Cart, ${totalItems} items`}>
-                <ShoppingCart className="h-5 w-5" />
+                 <ShoppingCart
+                  className={cn(
+                    "h-5 w-5 transition-transform duration-500 ease-in-out",
+                    isAnimatingCart && "animate-cart-icon" // Apply animation class conditionally
+                  )}
+                />
                 {totalItems > 0 && (
                   <Badge
                     variant="destructive"
