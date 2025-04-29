@@ -4,7 +4,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { Header } from '@/components/layout/Header';
-import { Toaster } from "@/components/ui/toaster"; // Import Toaster
+import { Footer } from '@/components/layout/Footer'; // Import Footer
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'SimpliShop', // Updated title
-  description: 'A simple and modern e-commerce experience.', // Updated description
+  title: 'SimpliShop',
+  description: 'A simple and modern e-commerce experience.',
 };
 
 export default function RootLayout({
@@ -34,8 +35,8 @@ export default function RootLayout({
           <main className="flex-grow container mx-auto px-4 py-8">
             {children}
           </main>
-          <Toaster /> {/* Add Toaster here */}
-          {/* Optional Footer can be added here */}
+          <Toaster />
+          <Footer /> {/* Add Footer here */}
         </CartProvider>
       </body>
     </html>
