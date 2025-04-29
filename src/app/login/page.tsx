@@ -1,6 +1,7 @@
 
 import { LoginForm } from '@/components/auth/LoginForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from 'next/link'; // Import Link
 
 export default function LoginPage() {
   return (
@@ -12,6 +13,13 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
            <LoginForm />
+           {/* Add link to Sign Up page */}
+           <div className="mt-4 text-center text-sm">
+             Don&apos;t have an account?{' '}
+             <Link href="/signup" className="underline text-primary hover:text-primary/80">
+                Sign up
+              </Link>
+           </div>
         </CardContent>
       </Card>
     </div>

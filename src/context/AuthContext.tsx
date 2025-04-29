@@ -2,7 +2,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useContext, useState, useMemo, useCallback } from "react"; // Added useCallback
 
 // Define a basic user type (adjust as needed)
 interface User {
@@ -12,11 +12,20 @@ interface User {
   // Add other relevant user properties
 }
 
+// Define input type for signup
+interface SignUpData {
+    name: string;
+    email: string;
+    // Password is not stored in context, handled during API call
+}
+
+
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (userData: User) => void;
   logout: () => void;
+  signup: (signupData: SignUpData) => Promise<boolean>; // Add signup function, returns success status
   // Add isLoading state if needed for async operations
 }
 
@@ -27,28 +36,53 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   // --- Login Function ---
-  // In a real app, this might be called after successful API authentication
-  const login = (userData: User) => {
-    // Here you would typically store the user data and maybe a token
-    // (e.g., in state, localStorage, sessionStorage, or secure cookies)
+  const login = useCallback((userData: User) => {
     console.log("Logging in user:", userData);
     setUser(userData);
     // Example: Store in localStorage (Consider security implications)
     // localStorage.setItem('user', JSON.stringify(userData));
-  };
+  }, []); // Added dependency array
 
   // --- Logout Function ---
-  const logout = () => {
-    // Clear user state and any stored tokens/data
+  const logout = useCallback(() => {
     console.log("Logging out user");
     setUser(null);
     // Example: Remove from localStorage
     // localStorage.removeItem('user');
-    // Optionally redirect to login page or home page
-  };
+  }, []); // Added dependency array
+
+  // --- Signup Function (Simulation) ---
+  // In a real app, this would make an API call to your backend
+  const signup = useCallback(async (signupData: SignUpData): Promise<boolean> => {
+    console.log("Signing up user (simulation):", signupData);
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Simulate success or failure (e.g., based on email)
+    // In a real app, the backend would handle validation (e.g., email uniqueness)
+    if (signupData.email.includes("fail")) {
+        console.log("Simulated signup failure.");
+        return false; // Indicate failure
+    }
+
+    // Simulate successful registration
+    // Option 1: Just indicate success, user needs to log in separately
+    // Option 2: Automatically log the user in after successful signup
+    // Let's go with Option 1 for now to keep it simple
+    console.log("Simulated signup success.");
+
+    // const newUser: User = {
+    //   id: `user-${Date.now()}`, // Generate a temporary ID
+    //   email: signupData.email,
+    //   name: signupData.name,
+    // };
+    // login(newUser); // Automatically log in after signup (Option 2)
+
+    return true; // Indicate success
+  }, []); // Added dependency array
+
 
   // --- Check Authentication Status ---
-  // The `isAuthenticated` flag is derived from the user state.
   const isAuthenticated = useMemo(() => !!user, [user]);
 
   // --- Load Initial State (Optional Example) ---
@@ -72,8 +106,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isAuthenticated,
       login,
       logout,
+      signup, // Add signup to context value
     }),
-    [user, isAuthenticated] // Dependencies for useMemo
+    [user, isAuthenticated, login, logout, signup] // Dependencies for useMemo
   );
 
 
